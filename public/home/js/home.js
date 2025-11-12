@@ -122,7 +122,7 @@ const renderQuizList = () => {
 
         card.querySelector('.del-btn').onclick = (e) => {
             e.stopPropagation(); // 카드 클릭 이벤트 막기
-            if(confirm(`선택된 주제 '${quiz.topic}'을(를) 제거하시겠습니까?`)){
+            if(confirm(`'${quiz.topic}'을(를) 제거하시겠습니까?`)){
                 quizzes.splice(index, 1);
                 saveQuizzes(quizzes);
                 renderQuizList();
