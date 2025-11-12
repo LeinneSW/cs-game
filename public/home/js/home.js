@@ -61,15 +61,18 @@ const startGame = async () => {
     createModal({
         type: 'prompt',
         title: '진행할 라운드 수',
+        backdrop: 'static',
         message: `진행할 총 라운드 수를 입력해주세요(최대 라운드: ${quizItems.length})`,
         defaultInput: Math.min(20, quizItems.length).toString()
     }).then(input => {
+        if(input == null) return;
         const roundLength = Number((input + '').trim());
-        if(!isFinite(roundLength)){
+        if(!Number.isFinite(roundLength)){
             createModal({
                 type: 'alert',
                 message: '올바른 숫자를 입력해주세요.'
             }).then(() => startGame());
+            return;
         }
         setGameState({
             round: 0,
