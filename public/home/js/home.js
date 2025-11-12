@@ -178,6 +178,9 @@ const uploadQuiz = async (e) => {
     }
     saveQuizzes(quizzes);
     renderQuizList();
+
+    // 동일한 파일을 다시 선택할 수 있도록 value 초기화
+    e.target.value = '';
 }
 
 window.addEventListener('load', async () => {
