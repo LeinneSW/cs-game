@@ -1,5 +1,5 @@
 /* ---------- 오버레이 ---------- */
-.modal-overlay{
+.cs-modal-overlay{
     z-index: 9999;
     position: fixed;
     inset: 0;
@@ -13,21 +13,21 @@
     transition: opacity .25s ease, visibility 0s linear .25s;
 }
 
-.modal-overlay.active{
+.cs-modal-overlay.active{
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
     transition: opacity .25s ease, visibility 0s;
 }
 
-.modal-overlay.leaving{
+.cs-modal-overlay.leaving{
     opacity: 0;
     pointer-events: none;
     visibility: visible;
     transition: opacity .25s ease, visibility 0s linear .25s;
 }
 
-.modal{
+.cs-modal{
     background: #fff;
     padding: 1.5rem 2rem;
     border-radius: .5rem;
@@ -40,20 +40,22 @@
     transition: transform .25s ease;
 }
 
-.modal-overlay.active .modal{
+.cs-modal-overlay.active .modal{
     transform: translateY(0);
 }
 
-.modal-overlay.leaving .modal{
+.cs-modal-overlay.leaving .modal{
     transform: translateY(-20px);
 }
 
-.modal-title{
+.cs-modal-title{
     margin-top: 0;
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
 /* ---------- 푸터 ---------- */
-.modal-footer{
+.cs-modal-footer{
     display: flex;
     justify-content: flex-end;
     gap: .75rem;
@@ -61,7 +63,7 @@
 }
 
 /* ---------- 버튼 ---------- */
-.modal-button{
+.cs-modal-button{
     min-width: 80px;
     padding: .5rem 1rem;
     font-size: 1rem;
@@ -70,25 +72,25 @@
     cursor: pointer;
 }
 
-.modal-button.primary{
+.cs-modal-button.primary{
     background: #2563eb;
     color: #fff;
     border-color: #2563eb;
 }
-.modal-button.primary:hover{
+.cs-modal-button.primary:hover{
     background: #1d4ed8;
 }
 
-.modal-button.ghost{
+.cs-modal-button.ghost{
     background: #fff;
     color: #374151;
     border-color: #d1d5db;
 }
-.modal-button.ghost:hover{
+.cs-modal-button.ghost:hover{
     background: #f3f4f6;
 }
 
-.modal-input{
+.cs-modal-input{
     width: 100%;
     padding: 9px;
     margin-top: 7px;

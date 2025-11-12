@@ -1,15 +1,15 @@
 const modalInnerHTML = `
-<div class="modal" role="dialog" aria-modal="true">
-    <h2 class="modal-title"></h2>
-    <p class="modal-body"></p>
-    <footer class="modal-footer"></footer>
+<div class="cs-modal" role="dialog" aria-modal="true">
+    <p class="cs-modal-title"></p>
+    <p class="cs-modal-body"></p>
+    <footer class="cs-modal-footer"></footer>
 </div>
 `;
 
 const createModalButton = (text, className) => {
     const b = document.createElement('button');
     b.textContent = text;
-    b.className = `modal-button ${className}`;
+    b.className = `cs-modal-button ${className}`;
     return b;
 }
 
@@ -28,17 +28,16 @@ const createModalButton = (text, className) => {
 export const createModal = ({type, message, title, backdrop, defaultInput, placeholder}) => {
     return new Promise((resolve) => {
         const overlay = document.createElement('div');
-        overlay.id = 'overlay';
-        overlay.className = 'modal-overlay';
+        overlay.className = 'cs-modal-overlay';
         overlay.innerHTML = modalInnerHTML;
 
-        const modalTitle = overlay.querySelector('.modal-title');
+        const modalTitle = overlay.querySelector('.cs-modal-title');
         title && (modalTitle.textContent = title);
 
-        const modalBody = overlay.querySelector('.modal-body');
+        const modalBody = overlay.querySelector('.cs-modal-body');
         modalBody.innerHTML = message.trim().replace(/\n/g, '<br>');
 
-        const footer = overlay.querySelector('.modal-footer');
+        const footer = overlay.querySelector('.cs-modal-footer');
         footer.append(createModalButton('확인', 'primary'));
         switch(type){
             case 'alert':
@@ -47,8 +46,8 @@ export const createModal = ({type, message, title, backdrop, defaultInput, place
                 footer.append(createModalButton('취소', 'ghost'));
                 break;
             case 'prompt':
-                modalBody.innerHTML += '<br><input type="text" class="modal-input">';
-                const input = modalBody.querySelector('.modal-input');
+                modalBody.innerHTML += '<br><input type="text" class="cs-modal-input">';
+                const input = modalBody.querySelector('.cs-modal-input');
                 defaultInput && (input.value = defaultInput);
                 placeholder && (input.placeholder = placeholder);
                 footer.append(createModalButton('취소', 'ghost'));
@@ -69,7 +68,7 @@ export const createModal = ({type, message, title, backdrop, defaultInput, place
 
         // 5) 이벤트 바인딩
         let cancelValue = false;
-        const modalInput = modalBody.querySelector('.modal-input');
+        const modalInput = modalBody.querySelector('.cs-modal-input');
         const [confirmBtn, cancelBtn] = footer.querySelectorAll('button');
         if(modalInput != null){
             cancelValue = null;
