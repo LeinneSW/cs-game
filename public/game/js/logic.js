@@ -106,7 +106,7 @@ const renderRound = () => {
     const gameState = getGameState();
     const chosungList = updateQuiz(gameState)
     chosungList.forEach((li, index) => {
-        if(li.dataset.char === li.dataset.cho){ // 한글이 아닌 경우(공백 등)
+        if(li.dataset.cho == null){ // 한글이 아닌 경우(공백 등)
             showChar[index] = true;
         }else{
             li.onclick = () => {

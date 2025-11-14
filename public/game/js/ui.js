@@ -147,7 +147,8 @@ export const updateQuiz = (gameState) => {
         const li = document.createElement('li');
         li.className = 'chosung-item'
         li.dataset.char = currentWord[index];
-        li.textContent = li.dataset.cho = cho;
+        li.textContent = cho;
+        if(li.dataset.char !== cho) li.dataset.cho = cho;
         csListElement.appendChild(li);
     });
     return csListElement.querySelectorAll('li')
