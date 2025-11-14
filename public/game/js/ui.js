@@ -1,8 +1,5 @@
-const KOR_BASE = 0xac00;
-const CHOSUNG_LIST = [
-    'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ',
-    'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'
-];
+import {toChosung} from "./kor.js";
+
 const nicknameColors = [
     "#EEA05D", "#EAA35F", "#E98158", "#E97F58",
     "#E76D53", "#E66D5F", "#E16490", "#E481AE",
@@ -18,14 +15,6 @@ const nicknameColors = [
 
 const tier2ColorList = {};
 const cheatKeyColorList = {};
-
-export function toChosung(str){
-    return [...str].map(ch => {
-        const code = ch.charCodeAt(0) - KOR_BASE;
-        if(code < 0 || code > 11171) return ch;
-        return CHOSUNG_LIST[Math.floor(code / 588)];
-    });
-}
 
 const getUserColor = (seed) => {
     const index = seed.split("")
