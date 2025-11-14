@@ -142,12 +142,13 @@ const parseQuiz = (json) => {
         throw new Error('데이터 구조가 잘못되었습니다.\n올바른 구조: {topic: string, description: string, items: QuizItem[]}');
     }
     for(const index in items){
-        const {word, hints} = items[index];
-        if(typeof word !== 'string' || !Array.isArray(hints)){
+        const item = items[index];
+        item.topic = topic; // 다중 주제 선택 기능을 위해 추가
+        item.hints ??= [] // 힌트 목록
+        item.aliases ??= [] // 외래어 등을 위해 추가(프루트, 푸르트 등)
+        if(typeof item.word !== 'string' || !Array.isArray(item.hints) || !Array.isArray(item.aliases)){
             throw new Error('QuizItem 구조가 올바르지 않습니다.\n올바른 구조: {word: string, hints: string[], aliases: string[]}');
         }
-        items[index].topic = topic; // 다중 주제 선택 기능을 위해 추가
-        items[index].aliases ??= [] // 외래어 등을 위해 추가(프루트, 푸르트 등)
     }
     return {topic, description, items}
 }
