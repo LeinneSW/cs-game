@@ -138,9 +138,6 @@ export const updateQuiz = (gameState) => {
         hintBox.appendChild(li);
     });
 
-    const nextBtn = document.getElementById('next-btn');
-    nextBtn.hidden = !gameState.solved;
-
     const csListElement = document.getElementById('chosung-list');
     csListElement.innerHTML = ''; // 기존 단어 초기화
     toChosung(currentWord).forEach((cho, index) => {
