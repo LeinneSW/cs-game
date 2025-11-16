@@ -117,8 +117,16 @@ export const convertColorCode = (colorCode, userId, chatChannelId) => {
  * @param {GameState} gameState
  */
 export const updateQuiz = (gameState) => {
+    const titleSpan = document.createElement('span');
+    titleSpan.style.display = 'none';
+    titleSpan.textContent = gameState.quizItems[gameState.round].topic;
+
     const topicTitle = document.getElementById('topic-title');
-    topicTitle.textContent = gameState.quizItems[gameState.round].topic;
+    topicTitle.textContent = "주제: ";
+    topicTitle.onclick = () => {
+        titleSpan.style.display = titleSpan.style.display === 'none' ? '' : 'none';
+    }
+    topicTitle.appendChild(titleSpan);
 
     const currentWord = gameState.quizItems[gameState.round].word;
     const currentHints = gameState.quizItems[gameState.round].hints;
