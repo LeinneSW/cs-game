@@ -119,6 +119,12 @@ function renderRound(){
 }
 
 window.addEventListener('load', async () => {
+    const gameState = getGameState();
+    if(!gameState){
+        location.href = '/home/';
+        return;
+    }
+
     document.getElementById('home-btn').onclick = () => {
         const modalOptions = {
             type: 'confirm',
@@ -131,8 +137,7 @@ window.addEventListener('load', async () => {
         })
     };
 
-    document.getElementById('next-btn').onclick = () => nextRound
-    if(getGameState().solved){
+    if(gameState.solved){
         nextRound()
     }else{
         renderRound();
