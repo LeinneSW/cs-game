@@ -17,7 +17,10 @@
 <div class="container-fluid p-4 vh-100 gap-1 d-flex flex-column">
     <div class="d-flex gap-2" style="flex: 1; min-height: 0">
         <div class="rounded border p-2 d-flex flex-column gap-2" style="flex: 2">
-            <h4 class="m-0">🎯 퀴즈 생성기</h4>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="fw-semibold fs-3">🎯 퀴즈 생성기</div>
+                <button class="btn btn-outline-secondary" onclick="loadFromJSON()">퀴즈 불러오기</button>
+            </div>
             <div>
                 <div class="input-group mb-1">
                     <span class="input-group-text">주제</span>
@@ -28,22 +31,18 @@
                     <textarea class="form-control" aria-label="description" id="description"></textarea>
                 </div>
             </div>
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-between">
                 <div class="fw-semibold fs-4">단어 목록</div>
-                <button class="btn btn-outline-primary" onclick="addItem()">+ 항목 추가</button>
+                <button class="btn btn-outline-primary" onclick="addItem()">추가</button>
             </div>
             <div id="items-container" class="overflow-y-scroll" style="flex: 1"></div>
         </div>
-        <div class="rounded border p-2" style="flex: 5">
-            <div>
-<!--                <button class="btn btn-outline-success" onclick="copyJSON()">퀴즈 복사</button>-->
-                <button class="btn btn-outline-secondary" onclick="loadFromJSON()">퀴즈 불러오기</button>
-                <button class="btn btn-outline-primary" onclick="downloadJSON()">퀴즈 저장</button>
+        <div class="rounded border p-2 d-flex flex-column gap-2" style="flex: 5; min-height: 0">
+            <div class="d-flex justify-content-between">
+                <div class="fw-semibold fs-4">JSON 결과</div>
+                <button class="btn btn-outline-primary" onclick="downloadJSON()">저장</button>
             </div>
-            <div id="json-output-section">
-                <h2 style="margin: 30px 0 15px 0;">JSON 결과</h2>
-                <div class="json-output" id="json-output"></div>
-            </div>
+            <div class="json-output h-100" id="json-output"></div>
         </div>
     </div>
 </div>
