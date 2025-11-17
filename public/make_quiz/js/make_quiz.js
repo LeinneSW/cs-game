@@ -78,7 +78,6 @@ function updateQuizJSON(){
     const topic = document.getElementById('topic').value.trim();
     const description = document.getElementById('description').value.trim();
     document.getElementById('json-output').textContent = JSON.stringify({topic, description, items}, null, 4);
-    //document.getElementById('json-output-section').scrollIntoView({behavior: 'smooth'});
 }
 
 function copyJSON(){
