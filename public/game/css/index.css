@@ -1,6 +1,7 @@
 @import url("chat.css");
 @import url("leaderboard.css");
 @import url("quiz-board.css");
+@import url("quiz-selector.css");
 
 .content-box{
     background: #fff;

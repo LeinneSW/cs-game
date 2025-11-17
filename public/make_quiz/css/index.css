@@ -1,0 +1,43 @@
+#items-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+#items-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 12px;
+}
+
+#items-container::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 12px;
+}
+
+#items-container::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.json-output {
+    background: #2d2d2d;
+    color: #f8f8f2;
+    padding: 20px;
+    border-radius: 10px;
+    font-family: 'Courier New', monospace;
+    font-size: 13px;
+    overflow-x: auto;
+    max-height: 500px;
+    overflow-y: auto;
+    white-space: pre;
+    margin-top: 20px;
+}
+
+.hidden {
+    display: none;
+}
