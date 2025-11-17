@@ -28,22 +28,20 @@ body{
 }
 
 /* 스크롤바 트랙 (배경) */
+::-webkit-scrollbar {
+    width: 7px;
+}
+
 ::-webkit-scrollbar-track{
-    background: transparent;
+    background: #f1f1f1;
+    border-radius: 12px;
 }
 
-/* 스크롤바 움직이는 부분 (thumb) */
 ::-webkit-scrollbar-thumb{
-    background-color: rgba(200, 200, 200, 0.4); /* 밝은 회색 스크롤바 */
+    background: #888;
+    border-radius: 12px;
 }
 
-/* 스크롤바 모서리 (corner) 없애기 */
-::-webkit-scrollbar-corner{
-    background: transparent;
-}
-
-/* Firefox */
-html{
-    scrollbar-width: thin;
-    scrollbar-color: rgba(200, 200, 200, 0.4) transparent; /* thumb / track */
+::-webkit-scrollbar-thumb:hover{
+    background: #555;
 }
