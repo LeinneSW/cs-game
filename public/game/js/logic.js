@@ -131,7 +131,8 @@ window.addEventListener('load', async () => {
             title: '게임 종료',
             message: '정말 진행중이던 게임을 종료하고 홈 화면으로 돌아가시겠습니까?',
         }
-        createModal(modalOptions).then(() => {
+        createModal(modalOptions).then(result => {
+            if(!result) return;
             resetGameState()
             location.href = '/home/'
         })
