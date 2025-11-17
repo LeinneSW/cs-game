@@ -1,6 +1,6 @@
 const RANK_LIMIT = 5;
 
-const createLeaderboardItem = (profile) => {
+function createLeaderboardItem(profile){
     const itemElement = document.createElement('div');
     itemElement.className = 'leaderboard-item new-item';
     itemElement.id = profile.userIdHash;

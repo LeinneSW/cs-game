@@ -4,7 +4,7 @@ import {getChannelId, getGameState, resetChannelId, resetGameState, saveGameStat
 import {createModal} from "../../util/modal.js";
 import {updateRankGraph} from "./leaderboard.js";
 
-const connectChannel = async (client) => {
+async function connectChannel(client){
     let liveStatus;
     try{
         liveStatus = await client.live.status(getChannelId());
@@ -101,7 +101,7 @@ function nextRound(){
     renderRound();
 }
 
-const renderRound = () => {
+function renderRound(){
     const showChar = [];
     const gameState = getGameState();
     const chosungList = updateQuiz(gameState)

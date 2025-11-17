@@ -66,7 +66,7 @@ export function saveQuizzes(quizzes){
 /**
  * @returns {GameState | null}
  */
-export const getGameState = () => {
+export function getGameState(){
     if(cachedGameState) return cachedGameState;
     try{
         cachedGameState = JSON.parse(sessionStorage.getItem(GAME_STATE_KEY));
@@ -79,22 +79,22 @@ export const getGameState = () => {
 /**
  * @param {GameState} newState
  */
-export const setGameState = (newState) => {
+export function setGameState(newState){
     cachedGameState = newState;
     sessionStorage.setItem(GAME_STATE_KEY, JSON.stringify(newState));
 }
 
-export const saveGameState = () => {
+export function saveGameState(){
     if(!cachedGameState) return;
     sessionStorage.setItem(GAME_STATE_KEY, JSON.stringify(cachedGameState));
 }
 
-export const resetGameState = () => {
+export function resetGameState(){
     cachedGameState = null
     sessionStorage.removeItem(GAME_STATE_KEY);
 }
 
-export const restartGame = () => {
+export function restartGame(){
     if(!cachedGameState) return;
     cachedGameState.round = 0
     cachedGameState.scores = {}
@@ -103,7 +103,7 @@ export const restartGame = () => {
     saveGameState()
 }
 
-export const getChannelId = () => {
+export function getChannelId(){
     const channelId = sessionStorage.getItem(CHANNEL_ID_KEY) || '';
     if(channelId.length === 32){
         return channelId;
@@ -112,7 +112,7 @@ export const getChannelId = () => {
     return ''
 }
 
-export const setChannelId = (channelId) => {
+export function setChannelId(channelId){
     if(channelId.length === 32){
         sessionStorage.setItem(CHANNEL_ID_KEY, channelId);
         return true
@@ -120,6 +120,6 @@ export const setChannelId = (channelId) => {
     return false
 }
 
-export const resetChannelId = () => {
+export function resetChannelId(){
     sessionStorage.removeItem(CHANNEL_ID_KEY);
 }

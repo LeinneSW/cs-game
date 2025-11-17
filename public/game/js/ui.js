@@ -16,7 +16,7 @@ const nicknameColors = [
 const tier2ColorList = {};
 const cheatKeyColorList = {};
 
-const getUserColor = (seed) => {
+function getUserColor(seed){
     const index = seed.split("")
         .map((c) => c.charCodeAt(0))
         .reduce((a, b) => a + b, 0) % nicknameColors.length
@@ -30,11 +30,11 @@ const htmlEntity = {
     '"': '&quot;',
     "'": '&#039;'
 }
-export const escapeHTML = (s) => {
+export function escapeHTML(s){
     return s.replace(/[&<>"']/g, m => htmlEntity[m]);
 }
 
-export const updateSteamerInfo = async (channel) => {
+export async function updateSteamerInfo(channel){
     const nickname = document.getElementById('streamer-name');
     const avatar = document.getElementById('streamer-avatar');
     const defaultURL = avatar.src;
@@ -50,7 +50,7 @@ export const updateSteamerInfo = async (channel) => {
  * @param {Record<string, unknown> | string} colorData
  * @param {Object} emojiList
  */
-export const addMessage = (profile, message, msecs = Date.now(), colorData = 'white', emojiList = {}) => {
+export function addMessage(profile, message, msecs = Date.now(), colorData = 'white', emojiList = {}){
     const messageList = document.getElementById('message-list');
     const messageDiv = document.createElement('div')
     messageDiv.id = msecs + ''
@@ -101,12 +101,12 @@ export const addMessage = (profile, message, msecs = Date.now(), colorData = 'wh
     }
 }
 
-export const clearMessageList = () => {
+export function clearMessageList(){
     const messageList = document.getElementById('message-list');
     messageList.innerHTML = '';
 }
 
-export const convertColorCode = (colorCode, userId, chatChannelId) => {
+export function convertColorCode(colorCode, userId, chatChannelId){
     if(colorCode.startsWith('CC')){
         return cheatKeyColorList[colorCode] || getUserColor(userId + chatChannelId);
     }
@@ -116,7 +116,7 @@ export const convertColorCode = (colorCode, userId, chatChannelId) => {
 /**
  * @param {GameState} gameState
  */
-export const updateQuiz = (gameState) => {
+export function updateQuiz(gameState){
     const titleSpan = document.createElement('span');
     titleSpan.style.display = 'none';
     titleSpan.textContent = gameState.quizItems[gameState.round].topic;
