@@ -49,11 +49,13 @@ let cachedGameState = null;
  */
 export function loadQuizzes(){
     try{
-        return JSON.parse(localStorage.getItem(QUIZ_KEY));
-    }catch{
-        saveQuizzes([]);
-        return [];
-    }
+        const dataStr = localStorage.getItem(QUIZ_KEY);
+        if(dataStr != null){
+            return JSON.parse(localStorage.getItem(QUIZ_KEY));
+        }
+    }catch{}
+    saveQuizzes([]);
+    return [];
 }
 
 /**
