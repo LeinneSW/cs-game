@@ -14,26 +14,26 @@
     <div class="d-flex gap-3 h-100">
         <!-- 왼쪽 영역 -->
         <div class="d-flex flex-column gap-3 h-100" style="flex: 9">
+            <!-- 채팅 카드 -->
+            <div class="content-box d-flex flex-column overflow-y-auto" style="flex: 3">
+                <div class="px-3 py-2 d-flex border-bottom align-items-center">
+                    <div class="fw-semibold">채팅</div>
+                </div>
+                <div id="message-list" class="message-list overflow-y-auto m-2"></div>
+            </div>
+
             <!-- 순위표 카드 -->
-            <div id="rank-container" class="content-box" style="flex: 6">
+            <div class="content-box d-flex flex-column overflow-y-auto" style="flex: 3">
                 <div class="px-3 py-2 d-flex border-bottom align-items-center">
                     <div class="fw-semibold">순위</div>
                 </div>
-                <div class="m-2">
+                <div class="m-2 overflow-y-auto" style="flex: 1">
                     <div class="leaderboard-items-container"></div>
                 </div>
             </div>
 
-            <!-- 채팅 카드 -->
-            <div class="content-box d-flex flex-column overflow-y-auto" style="flex: 4">
-                <div class="px-3 py-2 d-flex border-bottom align-items-center">
-                    <div class="fw-semibold">채팅</div>
-                </div>
-                <div id="message-list" class="overflow-y-auto m-2"></div>
-            </div>
-
             <!-- 힌트 카드 -->
-            <div class="content-box overflow-y-auto d-flex flex-column" style="flex: 3">
+            <div class="content-box overflow-y-auto d-flex flex-column" style="flex: 2">
                 <div class="px-3 py-2 d-flex border-bottom align-items-center">
                     <div class="fw-semibold">정답 및 힌트</div>
                 </div>
