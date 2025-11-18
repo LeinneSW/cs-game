@@ -1,8 +1,7 @@
 import {addMessage, clearMessageList, convertColorCode, renderQuizList, updateQuiz} from "./ui.js";
-import {getChannelId, getGameState, loadQuizzes, saveGameState, setGameState} from "./data.js";
+import {getChannelId, getGameState, saveGameState} from "./data.js";
 import {createModal} from "./util/modal.js";
 import {Leaderboard} from "./leaderboard.js";
-import {shuffle} from "./util/array.js";
 
 export const PHASE_SELECT_QUIZ = 0;
 export const PHASE_IN_GAME = 1;
