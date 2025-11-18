@@ -11,29 +11,6 @@ function addItem(){
             <button class="btn btn-outline-secondary" onclick="">세부</button>
             <button class="btn btn-outline-danger" onclick="removeItem(${itemCount})">제거</button>
         </div>`
-    /*<div class="card-body">
-        <div class="input-group">
-            <label>힌트 (1~3개)</label>
-            <div class="hint-container" id="hints-${itemCount}">
-                <div class="hint-item">
-                    <input type="text" placeholder="힌트 1">
-                    <button class="btn btn-danger btn-small" onclick="removeHint(this)">삭제</button>
-                </div>
-            </div>
-            <div class="add-buttons">
-                <button class="btn btn-secondary btn-small" onclick="addHint(${itemCount})">+ 힌트 추가</button>
-            </div>
-        </div>
-
-        <div class="input-group">
-            <label>별칭 (Aliases) - 선택사항</label>
-            <div class="alias-container" id="aliases-${itemCount}"></div>
-            <div class="add-buttons">
-                <button class="btn btn-secondary btn-small" onclick="addAlias(${itemCount})">+ 별칭 추가</button>
-            </div>
-        </div>
-    </div>
-    `;*/
 
     const container = document.getElementById('items-container');
     container.appendChild(itemCard);
@@ -68,7 +45,10 @@ function updateQuizJSON(){
         const hints = (card.dataset.hints || '').split('\n').filter(Boolean)
         const aliases = (card.dataset.aliases || '').split(',').filter(Boolean)
 
-        const data = {word, hints};
+        const data = {word};
+        if(hints.length > 0){
+            data.hints = hints;
+        }
         if(aliases.length > 0){
             data.aliases = aliases;
         }
@@ -78,13 +58,6 @@ function updateQuizJSON(){
     const topic = document.getElementById('topic').value.trim();
     const description = document.getElementById('description').value.trim();
     document.getElementById('json-output').textContent = JSON.stringify({topic, description, items}, null, 4);
-}
-
-function copyJSON(){
-    const output = document.getElementById('json-output').textContent;
-    navigator.clipboard.writeText(output)
-        .then(() => alert('JSON이 클립보드에 복사되었습니다!'))
-        .catch(err => alert('복사에 실패했습니다: ' + err));
 }
 
 function downloadJSON(){
@@ -118,54 +91,34 @@ window.addEventListener('load', () => {
         e.target.matches('input[type="text"], textarea') && updateQuizJSON();
     });
 
-    document.getElementById('file-input').addEventListener('change', function(e){
+    document.getElementById('file-input').addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if(!file) return;
 
-        const reader = new FileReader();
-        reader.onload = function(event){
-            try{
-                const jsonData = JSON.parse(event.target.result);
+        const rawText = await file.text()
+        try{
+            const jsonData = JSON.parse(rawText)
+            // 기존 항목 초기화
+            document.getElementById('items-container').innerHTML = '';
+            itemCount = 0;
 
-                // 기존 항목 초기화
-                document.getElementById('items-container').innerHTML = '';
-                itemCount = 0;
+            // 메타 정보 로드
+            document.getElementById('topic').value = jsonData.topic || '';
+            document.getElementById('description').value = jsonData.description || '';
 
-                // 메타 정보 로드
-                document.getElementById('topic').value = jsonData.topic || '';
-                document.getElementById('description').value = jsonData.description || '';
+            // 항목 로드
+            jsonData.items.forEach(item => {
+                const quizItem = addItem().querySelector('input[type="text"]');
 
-                // 항목 로드
-                jsonData.items.forEach(item => {
-                    const currentCard = addItem();
+                quizItem.value = item.word;
 
-                    // 단어 입력
-                    currentCard.querySelector('input[type="text"]').value = item.word;
-
-                    item.hints.forEach(hint => addHint(currentCard, hint));
-                    item.aliases?.forEach(alias => addAlias(currentCard, alias));
-
-                    // 별칭 입력
-                    if(item.aliases && item.aliases.length > 0){
-                        const aliasesContainer = currentCard.querySelector('.alias-container');
-                        item.aliases.forEach(alias => {
-                            const aliasItem = document.createElement('div');
-                            aliasItem.className = 'alias-item';
-                            aliasItem.innerHTML = `
-                                <input type="text" value="${alias.replace(/"/g, '&quot;')}">
-                                <button class="btn btn-danger btn-small" onclick="removeAlias(this)">삭제</button>
-                            `;
-                            aliasesContainer.appendChild(aliasItem);
-                        });
-                    }
-                });
-
-                alert('JSON 파일이 성공적으로 로드되었습니다!');
-            }catch(err){
-                alert('JSON 파일 파싱에 실패했습니다: ' + err.message);
-            }
-        };
-        reader.readAsText(file);
+                item.hints?.forEach(hint => addHint(quizItem, hint));
+                item.aliases?.forEach(alias => addAlias(quizItem, alias));
+            });
+            updateQuizJSON();
+        }catch{
+            alert('JSON 파일 파싱에 실패했습니다.')
+        }
 
         // 파일 입력 초기화 (같은 파일을 다시 선택할 수 있도록)
         e.target.value = '';
