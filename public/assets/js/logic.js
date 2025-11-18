@@ -94,13 +94,17 @@ function checkQuizAnswer(inputValue, profile){
 function nextRound(){
     const gameState = getGameState()
     ++gameState.round
-    gameState.solved = false;
-    saveGameState();
-
     if(gameState.round >= gameState.roundLength){
-        location.href = '/result/';
+        createModal({
+            type: 'alert',
+            backdrop: 'static',
+            message: '게임 종료! 누구누구 우승!!!!'
+        }).then(() => {})
+    }else{
+        gameState.solved = false;
+        renderRound();
     }
-    renderRound();
+    saveGameState();
 }
 
 function renderRound(){
