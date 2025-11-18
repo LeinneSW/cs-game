@@ -1,5 +1,5 @@
 import {toChosung} from "./util/kor.js";
-import {loadQuizzes, saveQuizzes, setGameState} from "./data.js";
+import {loadQuizzes, saveQuizzes, setGameState, uploadQuiz} from "./data.js";
 import {createModal} from "./util/modal.js";
 import {shuffle} from "./util/array.js";
 import {PHASE_IN_GAME, setGamePhase} from "./logic.js";
@@ -191,15 +191,15 @@ function toggleQuizSelection(index){
 
 function selectAllQuizzes(){
     const quizzes = loadQuizzes();
-    const cardElements = document.querySelectorAll('.card');
+    const cardElements = document.querySelectorAll('[data-quiz-index]');
     const allSelected = selectedQuizzes.size === quizzes.length;
 
     if(allSelected){
         selectedQuizzes.clear();
-        cardElements.forEach(card => card.classList.remove('selected'));
+        cardElements.forEach(card => card.classList.remove('bg-body-secondary'));
     }else{
         quizzes.forEach((_, index) => selectedQuizzes.add(index));
-        cardElements.forEach(card => card.classList.add('selected'));
+        cardElements.forEach(card => card.classList.add('bg-body-secondary'));
     }
     updateControlPanel();
 }
@@ -224,8 +224,8 @@ export function renderQuizList(){
 
         card.innerHTML = `
             <div class="d-flex justify-content-between align-items-center">
-                <div class="fs-3 fw-semibold">${quiz.topic}</div>
-                <button class="btn btn-outline-danger del-btn" title="삭제">✕</button>
+                <div class="fs-4 fw-semibold">${quiz.topic}</div>
+                <button class="btn btn-sm btn-outline-danger del-btn" title="삭제">✕</button>
             </div>
             <div>${quiz.description}</div>
             <div>문제 개수: 총 ${quiz.items.length}개</div>`;
@@ -305,5 +305,6 @@ window.addEventListener('load', async () => {
     }
 
     document.getElementById('start-btn').onclick = startGame;
+    document.getElementById('upload-quiz').onchange = uploadQuiz;
     document.getElementById('select-all-btn').onclick = selectAllQuizzes;
 })

@@ -17,7 +17,7 @@
 <div class="container p-4 vh-100">
     <div class="d-flex gap-3 h-100">
         <!-- 왼쪽 영역 -->
-        <div class="d-flex flex-column gap-3 h-100" style="flex: 9">
+        <div class="d-flex flex-column gap-3 h-100" style="flex: 2">
             <!-- 채팅 카드 -->
             <div class="content-box d-flex flex-column overflow-y-auto" style="flex: 3">
                 <div class="px-3 py-2 d-flex border-bottom align-items-center">
@@ -49,7 +49,7 @@
         </div>
 
         <!-- 메인 영역 -->
-        <div class="d-flex flex-column gap-3 h-100" style="flex: 20">
+        <div class="d-flex flex-column gap-3 h-100" style="flex: 5">
             <div class="content-box p-3 d-flex align-items-center">
                 <div class="d-flex align-items-center gap-2" style="flex: 1">
                     <img id="streamer-avatar" class="avatar" src="/assets/images/default-profile.png" alt="avatar"/>
@@ -62,18 +62,20 @@
                     <button id="quit-btn" class="btn btn-primary btn-sm ms-auto hidden">게임 종료</button>
                 </div>
             </div>
-            <div id="quiz-container" class="content-box p-4 flex-column hidden" style="flex: 1">
-                <div class="fs-3 fw-bold">주제 선택</div>
-                <div id="quiz-list" class="quiz-list gap-2"></div>
-                <div class="control-panel">
-                    <button id="start-btn" class="start-btn">게임 시작</button>
-                    <button id="select-all-btn" class="select-all-btn">전체 선택</button>
-                    <span id="selected-count" class="selected-count">0개 주제 선택됨</span>
+            <div id="quiz-container" class="content-box p-4 flex-column hidden gap-2" style="flex: 1; min-height: 0;">
+                <div class="fs-3 fw-bold">퀴즈 선택</div>
+                <div class="w-100 d-flex justify-content-between align-items-center">
+                    <span id="selected-count" class="selected-count">0개 선택됨</span>
+                    <label class="file-btn rounded-3 py-2 px-3">
+                        퀴즈 업로드
+                        <input type="file" accept=".json" id="upload-quiz" multiple hidden>
+                    </label>
                 </div>
-                <label class="file-btn">
-                    JSON 파일로 주제 추가
-                    <input type="file" accept=".json" id="file-input" multiple hidden>
-                </label>
+                <div id="quiz-list" class="quiz-list gap-1 w-100 overflow-y-auto" style="flex: 1"></div>
+                <div class="ms-auto">
+                    <button id="start-btn" class="btn btn-primary">게임 시작</button>
+                    <button id="select-all-btn" class="btn btn-outline-secondary">전체 선택</button>
+                </div>
             </div>
             <div id="game-container" class="content-box p-4 d-flex flex-column" style="flex: 1">
                 <!-- 상단: 주제 -->

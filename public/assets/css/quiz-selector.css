@@ -1,4 +1,11 @@
 .quiz-list{
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 3등분 */
+    align-content: start;
+}
+
+.file-btn{
+    cursor: pointer;
+    color: #fff;
+    background: #5e8bff;
 }
