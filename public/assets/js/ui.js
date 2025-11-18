@@ -122,9 +122,11 @@ export function convertColorCode(colorCode, userId, chatChannelId){
  * @param {GameState} gameState
  */
 export function updateQuiz(gameState){
+    const round = Math.min(gameState.quizItems.length, gameState.round) || 0;
+
     const titleSpan = document.createElement('span');
     titleSpan.style.display = 'none';
-    titleSpan.textContent = gameState.quizItems[gameState.round].topic;
+    titleSpan.textContent = gameState.quizItems[round].topic;
 
     const topicTitle = document.getElementById('topic-title');
     topicTitle.textContent = "주제: ";
@@ -133,12 +135,12 @@ export function updateQuiz(gameState){
     }
     topicTitle.appendChild(titleSpan);
 
-    const currentWord = gameState.quizItems[gameState.round].word;
-    const currentHints = gameState.quizItems[gameState.round].hints;
+    const currentWord = gameState.quizItems[round].word;
+    const currentHints = gameState.quizItems[round].hints;
 
     // UI 초기화
     const $roundInfo = document.getElementById('round-info');
-    $roundInfo.textContent = `라운드 ${gameState.round + 1} / ${gameState.roundLength}`;
+    $roundInfo.textContent = `라운드 ${round + 1} / ${gameState.roundLength}`;
 
     const $answerLabel = document.getElementById('answer-label');
     $answerLabel.innerText = currentWord;
