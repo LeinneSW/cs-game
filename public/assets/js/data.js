@@ -1,5 +1,6 @@
 import {shuffle} from "./util/array.js";
 import {createModal} from "./util/modal.js";
+import {renderQuizList} from "./ui.js";
 
 /**
  * @typedef {Object} QuizItem
