@@ -1,4 +1,4 @@
-import {getGameState, resetGameState, restartGame} from "../../game/js/data.js";
+import {getGameState, resetGameState, restartGame} from "../../assets/js/data.js";
 
 window.addEventListener("load", () => {
     const gameState = getGameState();

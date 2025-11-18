@@ -8,12 +8,6 @@
     border-radius: 50%;
 }
 
-.message-list{
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
 .message-list *{
     font-size: var(--font-size);
 }

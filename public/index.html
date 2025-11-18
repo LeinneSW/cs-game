@@ -2,12 +2,16 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+            crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+          crossorigin="anonymous">
     <title>초성게임</title>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" href="../assets/css/index.css">
-    <link rel="stylesheet" href="css/index.css">
-    <script type="module" src="js/logic.js"></script>
+    <link rel="stylesheet" href="assets/css/index.css">
+    <script type="module" src="assets/js/index.js"></script>
 </head>
 <body>
 <div class="container p-4 vh-100">
@@ -38,7 +42,7 @@
                     <div class="fw-semibold">정답 및 힌트</div>
                 </div>
                 <div class="m-2 overflow-y-auto">
-                    <div id="answer-label" class="p-1 fw-bold fs-4">정답</div>
+                    <div id="answer-label" class="p-1 fw-bold fs-4">게임 시작시 이곳에 정답이 보입니다</div>
                     <ul id="hint-list" class="hint-list"></ul>
                 </div>
             </div>
@@ -55,10 +59,23 @@
                     <div id="round-info" class="fw-semibold fs-5 text-center"></div>
                 </div>
                 <div class="d-flex" style="flex: 1">
-                    <button id="home-btn" class="btn btn-primary btn-sm ms-auto">🏠홈 화면</button>
+                    <button id="quit-btn" class="btn btn-primary btn-sm ms-auto hidden">게임 종료</button>
                 </div>
             </div>
-            <div class="content-box p-4 d-flex flex-column" style="flex: 1">
+            <div id="quiz-container" class="content-box p-4 flex-column hidden" style="flex: 1">
+                <div class="fs-3 fw-bold">주제 선택</div>
+                <div id="quiz-list" class="quiz-list gap-2"></div>
+                <div class="control-panel">
+                    <button id="start-btn" class="start-btn">게임 시작</button>
+                    <button id="select-all-btn" class="select-all-btn">전체 선택</button>
+                    <span id="selected-count" class="selected-count">0개 주제 선택됨</span>
+                </div>
+                <label class="file-btn">
+                    JSON 파일로 주제 추가
+                    <input type="file" accept=".json" id="file-input" multiple hidden>
+                </label>
+            </div>
+            <div id="game-container" class="content-box p-4 d-flex flex-column" style="flex: 1">
                 <!-- 상단: 주제 -->
                 <div id="topic-title" class="fs-3 fw-bold" data-bs-toggle="tooltip" title="클릭하면 주제가 공개됩니다"></div>
                 <!-- 중앙: 라운드, 초성 -->

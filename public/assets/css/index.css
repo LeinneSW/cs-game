@@ -1,4 +1,8 @@
+@import url("chat.css");
+@import url("leaderboard.css");
 @import url("modal.css");
+@import url("quiz-board.css");
+@import url("quiz-selector.css");
 
 @font-face{
     font-family: "Pretendard-Regular";
@@ -8,19 +12,21 @@
 }
 
 *{
-    box-sizing: border-box;
     font-family: "Pretendard-Regular", sans-serif;
 }
 
 body{
-    margin: 0;
     background: #78d4b0;
 }
 
-.wrap{
-    margin: 0 auto;
-    padding: 32px 100px;
-    text-align: center;
+.content-box{
+    background: #fff;
+    border-radius: .8rem;
+    box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.25);
+}
+
+.hidden{
+    display: none !important;
 }
 
 /* 스크롤바 트랙 (배경) */

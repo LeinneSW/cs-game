@@ -1,4 +1,8 @@
-import {toChosung} from "./kor.js";
+import {toChosung} from "./util/kor.js";
+import {loadQuizzes, saveQuizzes, setGameState} from "./data.js";
+import {createModal} from "./util/modal.js";
+import {shuffle} from "./util/array.js";
+import {PHASE_IN_GAME, setGamePhase} from "./logic.js";
 
 const nicknameColors = [
     "#EEA05D", "#EAA35F", "#E98158", "#E97F58",
@@ -15,6 +19,7 @@ const nicknameColors = [
 
 const tier2ColorList = {};
 const cheatKeyColorList = {};
+const selectedQuizzes = new Set();
 
 function getUserColor(seed){
     const index = seed.split("")
@@ -159,6 +164,131 @@ export function updateQuiz(gameState){
     return csListElement.querySelectorAll('li')
 }
 
+function updateControlPanel(){
+    const selectedSize = selectedQuizzes.size;
+    const startBtn = document.getElementById('start-btn');
+    const selectedCount = document.getElementById('selected-count');
+
+    startBtn.disabled = selectedSize === 0;
+    selectedCount.textContent = `${selectedSize}개 주제 선택됨`;
+
+    const quizzes = loadQuizzes();
+    const selectAllBtn = document.getElementById('select-all-btn');
+    selectAllBtn.textContent = selectedSize === quizzes.length ? '전체 해제' : '전체 선택';
+}
+
+function toggleQuizSelection(index){
+    const card = document.querySelector(`[data-quiz-index="${index}"]`);
+    if(selectedQuizzes.has(index)){
+        selectedQuizzes.delete(index);
+        card.classList.remove('bg-body-secondary');
+    }else{
+        selectedQuizzes.add(index);
+        card.classList.add('bg-body-secondary');
+    }
+    updateControlPanel();
+}
+
+function selectAllQuizzes(){
+    const quizzes = loadQuizzes();
+    const cardElements = document.querySelectorAll('.card');
+    const allSelected = selectedQuizzes.size === quizzes.length;
+
+    if(allSelected){
+        selectedQuizzes.clear();
+        cardElements.forEach(card => card.classList.remove('selected'));
+    }else{
+        quizzes.forEach((_, index) => selectedQuizzes.add(index));
+        cardElements.forEach(card => card.classList.add('selected'));
+    }
+    updateControlPanel();
+}
+
+export function renderQuizList(){
+    const quizListElement = document.getElementById('quiz-list');
+    quizListElement.innerHTML = '';
+    const quizzes = loadQuizzes();
+
+    selectedQuizzes.clear()
+
+    if(!quizzes.length){
+        quizListElement.innerHTML = '<p>추가된 주제가 없습니다.</p>';
+        updateControlPanel();
+        return;
+    }
+
+    quizzes.forEach((quiz, index) => {
+        const card = document.createElement('div');
+        card.className = 'border rounded-4 p-2';
+        card.dataset.quizIndex = index + '';
+
+        card.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="fs-3 fw-semibold">${quiz.topic}</div>
+                <button class="btn btn-outline-danger del-btn" title="삭제">✕</button>
+            </div>
+            <div>${quiz.description}</div>
+            <div>문제 개수: 총 ${quiz.items.length}개</div>`;
+        card.onclick = (e) => {
+            if(e.target.classList.contains('del-btn')) return;
+            toggleQuizSelection(index);
+        };
+        quizListElement.appendChild(card);
+
+        card.querySelector('.del-btn').onclick = (e) => {
+            e.stopPropagation(); // 카드 클릭 이벤트 막기
+            if(confirm(`'${quiz.topic}'을(를) 제거하시겠습니까?`)){
+                quizzes.splice(index, 1);
+                saveQuizzes(quizzes);
+                renderQuizList();
+            }
+        };
+    });
+    updateControlPanel();
+}
+
+async function startGame(){
+    if(selectedQuizzes.size === 0) return;
+
+    const quizzes = loadQuizzes();
+    const selectedQuizList = Array.from(selectedQuizzes).map(index => quizzes[index]);
+
+    // 모든 선택된 주제의 아이템들을 합치기
+    const topics = {};
+    const quizItems = [];
+    selectedQuizList.forEach(quiz => {
+        topics[quiz.topic] = quiz.description;
+        quiz.items.forEach(item => quizItems.push(structuredClone(item)));
+    });
+
+    createModal({
+        type: 'prompt',
+        title: '진행할 라운드 수',
+        backdrop: 'static',
+        message: `진행할 총 라운드 수를 입력해주세요(최대 라운드: ${quizItems.length})`,
+        defaultInput: Math.min(20, quizItems.length).toString()
+    }).then(input => {
+        if(input == null) return;
+        const roundLength = Number((input + '').trim());
+        if(!Number.isFinite(roundLength)){
+            createModal({
+                type: 'alert',
+                message: '올바른 숫자를 입력해주세요.'
+            }).then(() => startGame());
+            return;
+        }
+        setGameState({
+            round: 0,
+            roundLength: Math.max(1, Math.min(roundLength, quizItems.length)),
+            scores: {},
+            solved: false,
+            topics,
+            quizItems: shuffle(quizItems),
+        })
+        setGamePhase(PHASE_IN_GAME)
+    })
+}
+
 window.addEventListener('load', async () => {
     /** @var {Record<string, unknown>[]} colorCodes */
     const colorCodes = await (await fetch('/colorCodes')).json();
@@ -173,4 +303,7 @@ window.addEventListener('load', async () => {
                 break;
         }
     }
+
+    document.getElementById('start-btn').onclick = startGame;
+    document.getElementById('select-all-btn').onclick = selectAllQuizzes;
 })

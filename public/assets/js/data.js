@@ -1,10 +1,5 @@
-import {shuffle} from "../../util/array.js";
-
-const QUIZ_KEY = 'quizzes';
-const GAME_STATE_KEY = 'gameState'
-const CHANNEL_ID_KEY = 'channelId'
-
-let cachedGameState = null;
+import {shuffle} from "./util/array.js";
+import {createModal} from "./util/modal.js";
 
 /**
  * @typedef {Object} QuizItem
@@ -43,6 +38,65 @@ let cachedGameState = null;
  * @property {Record<string, string>} topics 선택된 주제
  * @property {QuizItem[]} quizItems 퀴즈 항목
  */
+
+const QUIZ_KEY = 'quizzes';
+const GAME_STATE_KEY = 'gameState'
+const CHANNEL_ID_KEY = 'channelId'
+
+/** @type {GameState | null} */
+let cachedGameState = null;
+
+/**
+ * @param {Object} json
+ * @returns {Quiz}
+ */
+export function parseQuiz(json){
+    const {topic, description, items} = json;
+    if(typeof topic !== 'string' || typeof description !== 'string' || !Array.isArray(items)){
+        throw new Error('데이터 구조가 잘못되었습니다.\n올바른 구조: {topic: string, description: string, items: QuizItem[]}');
+    }
+    for(const index in items){
+        const item = items[index];
+        item.topic = topic; // 다중 주제 선택 기능을 위해 추가
+        item.hints ??= [] // 힌트 목록
+        item.aliases ??= [] // 외래어 등을 위해 추가(프루트, 푸르트 등)
+        if(typeof item.word !== 'string' || !Array.isArray(item.hints) || !Array.isArray(item.aliases)){
+            throw new Error('QuizItem 구조가 올바르지 않습니다.\n올바른 구조: {word: string, hints: string[], aliases: string[]}');
+        }
+    }
+    return {topic, description, items}
+}
+
+export async function uploadQuiz(e){
+    const quizzes = loadQuizzes();
+    for(const file of e.target.files){
+        let json
+        try{
+            json = JSON.parse(await file.text())
+        }catch{}
+        if(!json){
+            await createModal({
+                type: 'alert',
+                message: `'${file.name}'에 대해 문제 발생.\n올바른 JSON 파일이 아닙니다.`
+            });
+            continue;
+        }
+        try{
+            const quiz = parseQuiz(json);
+            quizzes.push(quiz);
+        }catch(e){
+            await createModal({
+                type: 'alert',
+                message: `'${file.name}'에 대해 문제 발생.\n${e.message}`
+            })
+        }
+    }
+    saveQuizzes(quizzes);
+    renderQuizList();
+
+    // 동일한 파일을 다시 선택할 수 있도록 value 초기화
+    e.target.value = '';
+}
 
 /**
  * @returns {Quiz[]}
