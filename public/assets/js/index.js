@@ -40,9 +40,7 @@ async function onLoadForConnectedChatServer(){
             message: '해당 채널을 찾지 못했습니다. 채널명 혹은 채널 ID를 "정확히" 입력해주세요.'
         }
         await createModal(modalOptions)
-        // TODO: 재접속 기능 구현
-        //setTimeout(() => location.reload(), 500);
-        return
+        location.reload()
     }
 
     if(liveDetail.chatChannelId == null){
