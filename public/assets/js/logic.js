@@ -46,33 +46,33 @@ export async function connectChannel(client){
         }
 
         addMessage(chat.profile, message, date, colorData, emojiList);
-        startTime <= date && checkQuizAnswer(message.trim(), chat.profile)
+        startTime <= date && checkQuizAnswer(chat.profile, message.trim())
     });
     chzzkChat.connect().catch(() => {});
 }
 
-function checkQuizAnswer(inputValue, profile){
+export function skipQuiz(){
+    getGameState().solved = true;
+    saveGameState()
+    createModal({
+        type: 'alert',
+        message: '아무도 정답을 맞추지 못했습니다.'
+    }).then(() => nextRound())
+}
+
+export function checkQuizAnswer(profile, value){
+    if(profile == null || value == null){
+        return
+    }
+
     const gameState = getGameState()
     if(gameState.solved){ // 이미 정답을 맞춘 경우
         return
     }
 
     const currentItem = gameState.quizItems[gameState.round];
-    if(profile == null){
-        if(inputValue != null){
-            return
-        }
-        gameState.solved = true;
-        saveGameState()
-        createModal({
-            type: 'alert',
-            message: '아무도 정답을 맞추지 못했습니다.'
-        }).then(() => nextRound())
-        return;
-    }
-
     const answerWord = currentItem.word.replaceAll(' ', '');
-    if(answerWord !== inputValue || currentItem.aliases.includes(inputValue)){
+    if(answerWord !== value || currentItem.aliases.includes(value)){
         return;
     }
     gameState.solved = true;
@@ -86,8 +86,8 @@ function checkQuizAnswer(inputValue, profile){
     // TODO: fanfare effect
     createModal({
         type: 'alert',
-        title: `${profile.nickname}님 정답!`,
-        message: `정답: ${inputValue}`,
+        title: `축하합니다! ${profile.nickname}님이 정답을 맞추셨습니다!`,
+        message: `정답: ${value}`,
     }).then(() => nextRound())
 }
 
@@ -95,34 +95,36 @@ function nextRound(){
     const gameState = getGameState()
     ++gameState.round
     if(gameState.round >= gameState.roundLength){
+        gameState.round = gameState.roundLength - 1;
         createModal({
             type: 'alert',
             backdrop: 'static',
+            title: '게임 결과',
             message: '게임 종료! 누구누구 우승!!!!'
         }).then(() => {})
     }else{
         gameState.solved = false;
-        renderRound();
     }
+    renderRound();
     saveGameState();
 }
 
 function renderRound(){
-    const gameState = getGameState();
-    if(gameState.solved){
-        nextRound()
-        return;
-    }
-
     const showChar = [];
-    const chosungList = updateQuiz(gameState)
+    const gameState = getGameState();
+    const chosungList = updateQuiz(gameState);
     chosungList.forEach((li, index) => {
-        if(li.dataset.cho == null){ // 한글이 아닌 경우(공백 등)
+        if(gameState.solved){ // 이미 풀린 문제의 경우
+            li.textContent = li.dataset.char;
+        }else if(li.dataset.cho == null){ // 초성이 없는 경우(공백 or 숫자)
             showChar[index] = true;
         }else{
             li.onclick = () => {
-                li.textContent = (showChar[index] = !showChar[index]) ? li.dataset.char : li.dataset.cho;
-                showChar.filter(Boolean).length === chosungList.length && checkQuizAnswer()
+                showChar[index] = !showChar[index];
+                li.textContent = showChar[index] ? li.dataset.char : li.dataset.cho;
+                if(showChar.filter(Boolean).length === chosungList.length){
+                    skipQuiz()
+                }
             };
         }
     })
@@ -152,7 +154,11 @@ export function setGamePhase(phase){
 
             gameContainer.classList.add('d-flex')
             gameContainer.classList.remove('hidden');
+
             renderRound();
+            if(getGameState().solved){
+                nextRound()
+            }
             break;
     }
 }
