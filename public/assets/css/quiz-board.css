@@ -11,6 +11,8 @@
     padding: 0;
     margin: 0;
     list-style: none;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 .chosung-item{
