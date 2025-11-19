@@ -122,7 +122,7 @@ export function convertColorCode(colorCode, userId, chatChannelId){
  * @param {GameState} gameState
  */
 export function updateQuiz(gameState){
-    const round = Math.min(gameState.quizItems.length, gameState.round) || 0;
+    const round = Math.min(gameState.quizItems.length - 1, gameState.round) || 0;
 
     const titleSpan = document.createElement('span');
     titleSpan.style.display = 'none';
