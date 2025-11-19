@@ -263,32 +263,36 @@ async function startGame(){
         quiz.items.forEach(item => quizItems.push(structuredClone(item)));
     });
 
-    createModal({
-        type: 'prompt',
-        title: '진행할 라운드 수',
-        backdrop: 'static',
-        message: `진행할 총 라운드 수를 입력해주세요(최대 라운드: ${quizItems.length})`,
-        defaultInput: Math.min(20, quizItems.length).toString()
-    }).then(input => {
+    let input;
+    while(true){
+        input = await createModal({
+            type: 'prompt',
+            title: '진행할 라운드 수',
+            backdrop: 'static',
+            message: `진행할 총 라운드 수를 입력해주세요(최대 라운드: ${quizItems.length})`,
+            defaultInput: Math.min(20, quizItems.length).toString()
+        });
         if(input == null) return;
         const roundLength = Number((input + '').trim());
-        if(!Number.isFinite(roundLength)){
-            createModal({
+        if(!Number.isFinite(roundLength) || roundLength < 1){
+            await createModal({
                 type: 'alert',
                 message: '올바른 숫자를 입력해주세요.'
-            }).then(() => startGame());
-            return;
+            });
+            continue;
         }
+
         setGameState({
             round: 0,
-            roundLength: Math.max(1, Math.min(roundLength, quizItems.length)),
+            roundLength: Math.min(roundLength, quizItems.length),
             scores: {},
             solved: false,
             topics,
             quizItems: shuffle(quizItems),
         })
         setGamePhase(PHASE_IN_GAME)
-    })
+        break;
+    }
 }
 
 window.addEventListener('load', async () => {
