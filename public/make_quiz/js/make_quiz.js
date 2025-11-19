@@ -61,19 +61,18 @@ function updateQuizJSON(){
 }
 
 function downloadJSON(){
-    const output = document.getElementById('json-output').textContent;
-    const topic = document.getElementById('topic').value.trim() || '';
-    const description = document.getElementById('description').value.trim() || '';
     try{
-        if(JSON.parse(output) != null && topic && description){
+        const jsonData = JSON.parse(document.getElementById('json-output')?.textContent || '') || {};
+        if(jsonData.topic && jsonData.description && jsonData.items.length){
             const url = URL.createObjectURL(new Blob([output], {type: 'application/json'}));
             const a = document.createElement('a');
             a.href = url;
-            a.download = `${topic}.json`;
+            a.download = `${jsonData.topic}.json`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
+            return;
         }
     }catch{}
     alert('주제, 설명, 단어가 모두 있어야합니다.')
@@ -119,8 +118,6 @@ window.addEventListener('load', () => {
         }catch{
             alert('JSON 파일 파싱에 실패했습니다.')
         }
-
-        // 파일 입력 초기화 (같은 파일을 다시 선택할 수 있도록)
         e.target.value = '';
     });
 });
