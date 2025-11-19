@@ -2,7 +2,7 @@ import {createModal} from "./util/modal.js";
 import {getChannelId, getGameState, resetChannelId, resetGameState, setChannelId} from "./data.js";
 import {updateSteamerInfo} from "./ui.js";
 import {ChzzkClient} from "https://cdn.skypack.dev/chzzk"
-import {connectChannel, setGamePhase, PHASE_IN_GAME, PHASE_SELECT_QUIZ} from "./logic.js";
+import {connectChannel, setGamePhase, PHASE_IN_GAME, PHASE_SELECT_QUIZ, skipQuiz} from "./logic.js";
 
 async function onLoadForConnectedChatServer(){
     const client = new ChzzkClient({
@@ -68,6 +68,8 @@ window.addEventListener('load', async () => {
             location.reload()
         })
     };
+    document.getElementById('quiz-skip-btn').ondblclick = skipQuiz;
+
     const gameState = getGameState();
     if(gameState){
         setGamePhase(PHASE_IN_GAME);
