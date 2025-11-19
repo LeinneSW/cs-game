@@ -40,11 +40,11 @@
     transition: transform .25s ease;
 }
 
-.cs-modal-overlay.active .modal{
+.cs-modal-overlay.active .cs-modal{
     transform: translateY(0);
 }
 
-.cs-modal-overlay.leaving .modal{
+.cs-modal-overlay.leaving .cs-modal{
     transform: translateY(-20px);
 }
 
