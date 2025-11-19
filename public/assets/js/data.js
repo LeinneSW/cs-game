@@ -1,4 +1,3 @@
-import {shuffle} from "./util/array.js";
 import {createModal} from "./util/modal.js";
 import {renderQuizList} from "./ui.js";
 
@@ -149,15 +148,6 @@ export function saveGameState(){
 export function resetGameState(){
     cachedGameState = null
     sessionStorage.removeItem(GAME_STATE_KEY);
-}
-
-export function restartGame(){
-    if(!cachedGameState) return;
-    cachedGameState.round = 0
-    cachedGameState.scores = {}
-    cachedGameState.solved = false
-    shuffle(cachedGameState.quiz.items)
-    saveGameState()
 }
 
 export function getChannelId(){
